@@ -3,7 +3,6 @@
   //Requiere el archivo php donde estan todos los metodos que haran la sentencia SQL
   require_once('database_utilities.php');
 
-  //Si se oprime el boton de registrar entonces se llaman todas las variables por metodo post y se agrega la venta
   if(isset($_POST["registrar"]))
   {
 
@@ -17,40 +16,26 @@
       $total = $_POST["total"];
     }
 
-    //Se agrega la venta
-
     addSale($total,$fecha);
 
-    //Se obtiene el ultimo id de la venta (la que acabamos de registrar) para asi poder registrar los detalles de la venta en base a esa venta
     $id_venta = queryLastSale();
 
 
-    //Traemos el numero maximo de productos que pusimos por medo de JavaScript en un contenedor escondido para saber cuantos productos agregamos y asi poder
-    //recorrer los distintos inputs que le pusimos un contador a lado del input para poderlos recorrer en un ciclo
     $iMax = $_POST['hid'];
              
-    //Se recorre el ciclo en base al numero de productos
     for($i = 1; $i<=$iMax; $i++)
     {
 
-   	  //Se obitene el nombre del producto mediante un post a un input que tiene como nombre prod + un numero consecutivo. Esto se hizo por medio de Javascript
       $nombre_producto = $_POST["prod".$i];
-
-      //Lo mismo con cant
       $cant = $_POST["cant".$i];
-
-      //Lo mismo con precio
       $precio = $_POST["precio".$i];
 
-      //Se obtiene el id de producto en base al nombre del producto que se registro
       $id_prod = queryIdProduct($nombre_producto);
 
-      //Se agrega el producto al detalle de la venta con todos sus datos
       addDetailsSale($id_venta,$id_prod,$cant,$precio);
     }
 
 
-    //Se redirige a la vista de ventas
     header("Location:sales_view.php");
   
   }
@@ -89,7 +74,7 @@
               
               <div align="center">
               <label>Fecha </label>
-              <input type="text" name="fecha" style="width: 400px;" id="fecha" readonly>
+              <input type="text" name="fecha" style="width: 400px;" id="fecha">
               </div>
               <br>
               <hr width="500px;">
@@ -99,8 +84,6 @@
               <label>Producto </label>
               <select name="producto" id="producto" style="width: 400px;" >
                 <?php 
-
-                  // Se obtienen todos lo sproductos de la base de datos y se ponen en un select, se pone su precio y nombre
                   $resultados = queryProducts();
                   foreach( $resultados as $id => $user){
                  ?>
@@ -135,8 +118,11 @@
     <?php require_once('footer.php'); ?>
 
   <script type="text/javascript">
+      
+    /*document.getElementById("btn").addEventListener("click", function () {
+      form.submit();
+    });*/
 
-  	  //Se obtiene la fecha del sistema y se ingresa en el input de fecha
       var fecha = document.getElementById('fecha');
 
         var today = new Date();
@@ -160,14 +146,9 @@
       fecha.setAttribute("value",today);
 
 
-      //Se crean diferentes variables como total para poderlos ingresar en las cajas de texto y asi imprimirlo sen pantalla en base a los productos que se escojan
       var total = 0;
-      //Variable acumulativa que nos permitira hacer distintos inputs con el nombre del elemento mas el numero acumulativo, esto nos permitira para poder obtener esta 
-      //informacion por PHP haciendo inputs con un numero consecutivo y asi recorrer un ciclo obteniendo estos valores e ingresandolos en la tabla detalle_Venta
       var count = 0;
       var div1 = document.getElementById("div1");
-
-      //input escondido que nos permitira guardar cuantos productos se guardaron y asi poder recorrer un ciclo en base a eso
       var input_hidden = document.createElement("input");
       input_hidden.setAttribute("name","hid");
       input_hidden.setAttribute("type","hidden");
@@ -182,7 +163,6 @@
       var total1 = document.getElementById("total");
 
 
-      //Funcion para agregar un producto cada vez que se seleccione algo y hacer todo dinamico, calculando el total
       function agregarProd()
       {
         var cantidad = document.getElementById("cantidad").value;
@@ -207,37 +187,27 @@
             input_article.setAttribute("style", "width:100px;");
             input_article.setAttribute("class", "n");
             input_article.setAttribute("readonly", "");
-
-            //Se le pone como nombre la palabra producto mas el numero acumulativo
             input_article.setAttribute("name","prod" + count);
             input_precio.setAttribute("value",precio);
             input_precio.setAttribute("style", "width:100px;");
             input_precio.setAttribute("class", "n");
             input_precio.setAttribute("readonly", "");
-
-            //Se le pone como nombre la palabra precio y el numero acumulativo
             input_precio.setAttribute("name","precio" + count);
             input_cantidad.setAttribute("value", cantidad);
             input_cantidad.setAttribute("style", "width:100px;")
             input_article.setAttribute("class", "n");
             input_cantidad.setAttribute("readonly", "");
-
-            //Se le pone como nombre la palabra cant y el numero acumulativo
             input_cantidad.setAttribute("name","cant" + count);
             
-            //Se agrega todo a pantalla
             div1.appendChild(br2);
             div1.appendChild(input_article);
             div1.appendChild(input_precio);
             div1.appendChild(input_cantidad);
 
-            //Se calcula total
             total = total + (precio*cantidad);
 
-            //Se ingresa el total en el input total
             total1.setAttribute("value",total);
 
-            //Se agrega el numero maximo de productos en la caja de texto escondida
             input_hidden.setAttribute("value",count);
         }
 

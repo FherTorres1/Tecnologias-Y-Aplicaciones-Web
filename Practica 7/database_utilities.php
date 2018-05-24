@@ -16,19 +16,199 @@
 		echo 'Error al conectarnos: ' . $e->getMessage();
 	}
 
-	//Funcion donde se inserta un nuevo usuario
+	
+
+	//Funcion delete que borrara un usuario en base a su id
+	function delete($type,$id)
+	{
+		global $PDO;
+
+		//El parametro type nos permite saber que tipo de deportista es y asi saber de que tabla buscaremos y borraremos
+		//ese deportista
+		if($type==1)
+		{
+			$table = "futbolistas";
+		}
+		else if($type==2)
+		{
+			$table = "basquetbolistas";
+		}
+		$sql = "DELETE FROM $table WHERE id='$id'";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+	}
+
+	
+
+	
+
+	//Funcion que hace query de todos los conteos en la primera tabla del archivo count_view.php, aqui solo se 
+	//manda llamar los distintos metodos que hacen las consultas query.
+	function run_query()
+	{
+		$arr['total_users'] = queryTotalUsers();
+		$arr['total_user_types'] = queryTotalUserTypes();
+		$arr['total_status_types'] = queryTotalStatusTypes();
+		$arr['total_user_logs'] = queryTotalLogs();
+		$arr['total_user_active'] = queryActiveUsers();
+		$arr['total_user_inactive'] = queryInactiveUsers();
+
+		//Se regresa el array asociativo con todos los resultados		
+		return $arr;
+
+	}
+
+	//Funcion que cuenta todos los usuarios para mostrarlos en la primera tabla en count_view.php
+	function queryTotalUsers()
+	{
+		global $PDO;
+		$sql = "SELECT COUNT(*) AS total_users FROM USER";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results[0]['total_users'];
+	}
+
+	//Funcion que cuenta todos los tipos de usuarios para mostrarlos en la primera tabla en count_view.php
+	function queryTotalUserTypes()
+	{
+		global $PDO;
+		$sql = "SELECT count(*) as total_user_types FROM user_type";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results[0]['total_user_types'];
+
+	}
+
+	//Funcion que cuenta todos los tipos de estado para mostrarlos en la primera tabla en count_view.php
+	function queryTotalStatusTypes()
+	{
+		global $PDO;
+		$sql = "SELECT count(*) as total_status_types FROM status";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results[0]['total_status_types'];
+
+	}
+
+	//Funcion que cuenta todos los logs para mostrarlos en la primera tabla en count_view.php
+	function queryTotalLogs()
+	{
+		global $PDO;
+		$sql = "SELECT count(*) as total_user_logs FROM user_log";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results[0]['total_user_logs'];
+
+	}
+
+	//Funcion que cuenta todos los usuarios ACTIVOS para mostrarlos en la primera tabla en count_view.php
+	function queryActiveUsers()
+	{
+		global $PDO;
+		$sql = "SELECT count(*) as total_users_active from user where status_id = 1";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results[0]['total_users_active'];
+
+	}
+
+	//Funcion que cuenta todos los usuarios INACTIVOS para mostrarlos en la primera tabla en el archivo count_view.php
+	function queryinActiveUsers()
+	{
+		global $PDO;
+		$sql = "SELECT count(*) as total_users_inactive from user where status_id = 2";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results[0]['total_users_inactive'];
+
+	}
+
+	//Funcion que crea la vista de la tabla 'users' para mostrarlos en count_view.php
+	function queryUsersTable()
+	{
+		global $PDO;
+		$sql = "SELECT * from user";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results;
+	}
+
+	//Funcion que crea la vista de la tabla 'user_logs' para mostrarlos en count_view.php
+	function queryUserLogTable()
+	{
+		global $PDO;
+		$sql = "SELECT * from user_log";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results;
+	}
+
+	//Funcion que hace la vista de de user_types para mostrarlos en count_view.php
+
+	function queryUserTypeTable()
+	{
+		global $PDO;
+		$sql = "SELECT * from user_type";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results;
+	}
+
+	//Funcion que hace la vista de la tabla 'status' para mostrarlo en count_vierw.php
+	function queryStatusTable()
+	{
+		global $PDO;
+		$sql = "SELECT * from status";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results;
+	}
+
+	//Esta funcion nos permite traer todos los futbolistas que tengamos en nuestra base de datos y mostrarlos en
+	//sports_view.php
+	function querySoccerPlayers()
+	{
+		global $PDO;
+		$sql = "SELECT * from futbolistas";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results;
+	}
+
+	//Esta funcion nos permite traer todos los basquetbolistas que tengamos en nuestra base de datos y mostrarlos en
+	//sports_view.php
+	function queryBasketballPlayers()
+	{
+		global $PDO;
+		$sql = "SELECT * from basquetbolistas";
+		$statement = $PDO->PREPARE($sql);
+		$statement->EXECUTE();
+		$results = $statement-> fetchAll();
+		return $results;
+	}
+
+	//Funcion donde se inserta un nuevo deportista
 	function addUser($user,$password)
 	{
 		global $PDO;
 
-		//Se encripta la contrasena del usuario con MD5
 		$safePassword = md5($password);
   		$sql = "INSERT INTO usuario (usuario,password) VALUES ('$user','$safePassword')";
 		$statement = $PDO->PREPARE($sql);
 		$statement->EXECUTE();
   	}
 
-  	//Funcion donde se inserta un producto
 	function addProduct($nombre,$precio)
 	{
 		global $PDO;
@@ -37,8 +217,6 @@
 		$statement = $PDO->PREPARE($sql);
 		$statement->EXECUTE();
   	}
-
-  	//Funcion para buscar comprobar si el usuario existe al momento de hacer login, regresa un true si esta registrado en la base de datos o un false si no lo esta
   	function findUser($user,$password)
   	{
   		global $PDO;
@@ -54,7 +232,6 @@
 		return false;
   	}
 
-  	//Funcion que obtiene todos los usuarios para mostrarlos en la tabla
   	function queryUsers()
   	{
   		global $PDO;
@@ -65,7 +242,6 @@
 		return $results;
   	}
 
-  	//Funcion que borra un usuario
   	function deleteUser($id)
   	{
   		global $PDO;
@@ -75,7 +251,6 @@
 		$statement->EXECUTE();
   	}
 
-  	//Funcion para traer los datos del usuario en el formulacio para actualizar
 	function search_per_id_user($id)
 	{
 		global $PDO;
@@ -100,7 +275,6 @@
 
   	}
 
-  	//Funcion para traer la informacion de todos los productos y mostrarlos en la tabla
   	function queryProducts()
   	{
   		global $PDO;
@@ -111,7 +285,6 @@
 		return $results;
   	}
 
-  	//Funcion para borrar productos
   	function deleteProduct($id)
   	{
   		global $PDO;
@@ -121,7 +294,6 @@
 		$statement->EXECUTE();
 	}
 
-	//Funcion para traer los datos del producto en el formulario de actualizar
 	function search_per_id_product($id)
 	{
 		global $PDO;
@@ -134,7 +306,6 @@
 
 	}
 
-	//Funcion para actualizar los datos del producto
 	function updateProduct($id,$nombre,$precio)
 	{
 		global $PDO;
@@ -145,7 +316,6 @@
 
   	}
 
-  	//Funcion para traer todas las ventas y mostrarla en la tabla de ventas
   	function querySales()
   	{
   		global $PDO;
@@ -156,7 +326,6 @@
 		return $results;
   	}
 
-  	//Funcion para traer los detalles de cada venta cuando se de click en el boton Detalle de Venta
   	function querySalesDetails($id)
   	{
   		global $PDO;
@@ -168,7 +337,6 @@
 		return $results;
   	}
 
-  	//Funcion para agregar los datos de control de una venta
   	function addSale($monto,$fecha)
   	{
   		global $PDO;
@@ -177,7 +345,6 @@
   		$statement->EXECUTE();
   	}
 
-  	//Funcion para traer la ultima venta que se registro y asi poder registrar sus detalles
   	function queryLastSale()
   	{
   		global $PDO;
@@ -189,7 +356,6 @@
   		return $results[0]['max(id)'];
   	}
 
-  	//Funcion para registrar los detalles de cada venta
   	function addDetailsSale($id_venta,$id_producto,$cantidad,$prom_prenda)
   	{
   		global $PDO;
@@ -200,7 +366,6 @@
   		$statement->EXECUTE();
   	}
 
-  	//Funcion para traer los datos del producto en base a su id y poderlo registrar en detalle_venta
   	function queryIdProduct($nombre)
   	{
   		global $PDO;
@@ -209,21 +374,6 @@
   		$statement->EXECUTE();
   		$results = $statement->fetchAll();
   		return $results[0]['id'];
-  	}
-
-  	//Funcion que busca la ventas en base a su fecha (se utiliza para el filtro de busqueda por fecha)
-  	function querySalesPerDate($date)
-  	{
-  		global $PDO;
-  		if($date == '1970-01-01')
-  		{
-  			return querySales();
-  		}
-  		$sql = "SELECT * from venta where fecha = '$date'";
-  		$statement = $PDO->PREPARE($sql);
-		$statement->EXECUTE();
-		$results = $statement-> fetchAll();
-		return $results;
   	}
 
 		

@@ -2,10 +2,7 @@
 
 //Se requiere el archivo database_utilities.php para poder usar las diferentes metodos que usaran las senetencias SQL
 require_once('database_utilities.php');
-
-//Se obtendra el valor de los resultados por el metodo querySales
 $resultados = querySales();
-
 ?>
 <!doctype html>
 <html class="no-js" lang="en">
@@ -32,40 +29,9 @@ $resultados = querySales();
 
               <h3>Ventas</h3>
               <a href="./add_sale.php" class="button radius tiny">Nueva Venta</a><br>
-              <form method="POST">
-                <div align="right">
-                    <label for="fecha">Filtro por Fecha </label>
-                    <input type="date" name="fecha" style="width: 200px;">
-                    <div>
-                    <input type="submit" name="filtro" value="Buscar" class="button radio tiny">
-                    <input type="submit" name="limpiar" value="Limpiar Filtro" class="button radio tiny">
-                    </div>
-                </div>  
-              </form>
-
-
-              <?php
-                //FILTRO DE BUSQUEDA
-                if(isset($_POST['filtro']))
-                {
-                  //Se obtendra la fecha que se ingreso en el filtro
-                  $date = $_POST['fecha'];
-                  //Se cambiara el formato para que coincida con la base de datos
-                  $fecha = date("Y-m-d",strtotime($date));
-
-                  //Se obtendran lo sresultados por el metodo querySalesPerDate
-                  $resultados=querySalesPerDate($fecha);
-                }
-                //Limpiar el filtro de busqueda y que salgan todas las fechas
-                if(isset($_POST['limpiar']))
-                {
-                  $resultados = querySales();
-                }
-              ?>
 
               <?php if($resultados){ 
-              //Si hay resultados entonces se hara la tabla?> 
-          
+              //Si hay resultados entonces se hara la tabla?>              
               <table>
                 <thead>
                   <tr>
@@ -83,13 +49,16 @@ $resultados = querySales();
                     <td><?php echo $user['id'] ?></td>
                     <td><?php echo $user['monto'] ?></td>
                     <td><?php echo $user['fecha'] ?></td>
-                    <?php // Por cada venta nueva se creara un boton para ver lo detalles de la venta?>
+                    <?php // Por cada futbolista nuevo se crearan dos botones, uno para eliminar y otro para actualizar
+                          // informacion.
+                          // En el boton de eliminar se desplegara una alerta para estar seguros de eliminar al usuario.
+                          // En ambas ocasiones se pasara el id de cada usuario para hacer las distintas funciones como eliminar o actualizar en base al id de cada futbolista?>
                     <td>
                     <a href="./sales_details.php?id=<?php echo $user['id']; ?>" class="button radius tiny success">Ver detalles</a></td>
                   </tr>
                   <?php } ?>
                   <tr>
-                    <!-- Se hara un conteo de las ventas -->
+                    <!-- Se hara un conteo de cada futbolista -->
                     <td colspan="6"><b>Total de registros: </b> <?php echo count($resultados); ?></td>
                   </tr>
                 </tbody>
