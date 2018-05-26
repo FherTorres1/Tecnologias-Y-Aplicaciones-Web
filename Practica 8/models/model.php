@@ -16,6 +16,10 @@ Class Informacion
 		{
 			$respuesta = "./views/maestros/$accion.php";
 		}
+		else if($accion=="tutorias" || $accion=="registrar_tutoria")
+		{
+			$respuesta = "./views/tutorias/$accion.php";
+		}
 		else if($accion=="ingresar" || $accion=="salir")
 		{
 			$respuesta =  "views/modules/".$accion.".php";

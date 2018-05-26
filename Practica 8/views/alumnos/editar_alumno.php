@@ -1,4 +1,4 @@
-<h1>EDITAR CARRERA</h1>
+<h1>EDITAR ALUMNO</h1>
 
 <form method="post">
 	
@@ -6,7 +6,7 @@
 
 		$editarAlumno = new MvcController();
 		$editarAlumno -> editarAlumnoController();
-		//$editarCarrera -> actualizarCarreraController();
+		$editarAlumno -> actualizarAlumnoController();
 
 	?>
 

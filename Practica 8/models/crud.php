@@ -167,6 +167,23 @@
 				return "error";
 			}
 		}
+		public function actualizarAlumnoModel($datosModel,$tabla)
+		{
+			$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET carrera = :carrera, nombre = :nombre, tutor = :tutor where matricula = :id");
+			$stmt->bindParam(":id",$datosModel["matricula"],PDO::PARAM_INT);
+			$stmt->bindParam(":carrera",$datosModel["carrera"],PDO::PARAM_INT);
+			$stmt->bindParam(":nombre",$datosModel["nombre"],PDO::PARAM_STR);
+			$stmt->bindParam(":tutor",$datosModel["tutor"],PDO::PARAM_INT);
+			if($stmt->execute())
+			{
+				return "success";
+			}
+			else
+			{
+				return "error";
+			}
+		}
+			
 		public function obtenerMaestrosModel($tabla)
 		{
 			$stmt = Conexion::conectar()->prepare("SELECT * from $tabla");
@@ -210,10 +227,10 @@
 
 			$stmt->close();
 		}
-		public function ingresoUsuarioModel($datosModel, $tabla){
+		public static function ingresoUsuarioModel($datosModel, $tabla){
 
-		$stmt = Conexion::conectar()->prepare("SELECT usuario, password FROM $tabla WHERE usuario = :usuario");	
-		$stmt->bindParam(":usuario", $datosModel["usuario"], PDO::PARAM_STR);
+		$stmt = Conexion::conectar()->prepare("SELECT email, password,numero FROM $tabla WHERE email = :email");	
+		$stmt->bindParam(":email", $datosModel["usuario"], PDO::PARAM_STR);
 		$stmt->execute();
 
 		#fetch(): Obtiene una fila de un conjunto de resultados asociado al objeto PDOStatement. 
@@ -233,6 +250,51 @@
 			$stmt->close();
 
 		}
+		public function obtenerAlumnosDeTutorModel($datosModel,$tabla)
+		{
+			$stmt = Conexion::conectar()->prepare("SELECT * from $tabla where tutor = :tutor");
+			$stmt->bindParam(":tutor",$datosModel,PDO::PARAM_INT);
+			$stmt->execute();
+
+			return $stmt->fetchAll();
+			$stmt->close();
+		}
+		public function vistaTutoriasModel($datosModel,$tabla)
+		{
+
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla where tutor = :tutor");
+			$stmt->bindParam(":tutor",$datosModel,PDO::PARAM_INT);	
+			$stmt->execute();
+
+			return $stmt->fetchAll();
+
+			$stmt->close();
+
+		}
+		public function registrarTutoriaModel($datosModel,$tabla)
+		{
+			$stm = Conexion::conectar()->prepare("INSERT INTO $tabla (alumno,tutor,fecha,hora,tipo,descripcion)
+												 VALUES(:alumno,:tutor,:fecha,:hora,:tipo,:descripcion)");
+
+			$stm->bindParam(":alumno",$datosModel["alumno"],PDO::PARAM_INT);
+			$stm->bindParam(":tutor",$datosModel["tutor"],PDO::PARAM_INT);
+			$stm->bindParam(":fecha",$datosModel["fecha"],PDO::PARAM_STR);
+			$stm->bindParam(":hora",$datosModel["hora"],PDO::PARAM_STR);
+			$stm->bindParam(":tipo",$datosModel["tipo"],PDO::PARAM_STR);
+			$stm->bindParam(":descripcion",$datosModel["descripcion"],PDO::PARAM_STR);
+			
+			if($stm->execute())
+			{
+				return "success";
+			}
+			else
+			{
+				return "error";
+			}
+
+			$stm->close();
+		}
+
 
 	}
 ?>

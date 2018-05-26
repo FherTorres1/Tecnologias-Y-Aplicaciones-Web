@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-05-2018 a las 07:36:16
--- Versión del servidor: 10.1.26-MariaDB
--- Versión de PHP: 7.1.9
+-- Tiempo de generación: 26-05-2018 a las 04:36:57
+-- Versión del servidor: 10.1.25-MariaDB
+-- Versión de PHP: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -40,7 +40,8 @@ CREATE TABLE `alumno` (
 --
 
 INSERT INTO `alumno` (`matricula`, `nombre`, `carrera`, `tutor`) VALUES
-(1, 'Fher Francisco', 6, 1);
+(1, 'Fher Francisco', 6, 1),
+(2, 'Yuridia Montelongo', 6, 1);
 
 -- --------------------------------------------------------
 
@@ -58,7 +59,7 @@ CREATE TABLE `carrera` (
 --
 
 INSERT INTO `carrera` (`id`, `nombre`) VALUES
-(6, 'Ingenieria en Tencologias de la Informacion'),
+(6, 'Ingenieria en Tencologias de la Informacion2'),
 (8, 'Ingenieria en Mecatronica');
 
 -- --------------------------------------------------------
@@ -80,8 +81,51 @@ CREATE TABLE `maestro` (
 --
 
 INSERT INTO `maestro` (`numero`, `carrera`, `nombre`, `email`, `password`) VALUES
-(1, 6, 'Mario Rodriguez', 'm@hotmail.com', 'mario'),
-(3, 8, 'Mariana Magdalena', 'm@hotmail.com', 'mariana');
+(1, 6, 'Mario Rodriguez', 'm@hotmail.com', 'mario');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tutoria`
+--
+
+CREATE TABLE `tutoria` (
+  `id` int(11) NOT NULL,
+  `alumno` int(11) NOT NULL,
+  `tutor` int(11) NOT NULL,
+  `fecha` varchar(30) NOT NULL,
+  `hora` varchar(30) NOT NULL,
+  `tipo` varchar(30) NOT NULL,
+  `descripcion` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tutoria`
+--
+
+INSERT INTO `tutoria` (`id`, `alumno`, `tutor`, `fecha`, `hora`, `tipo`, `descripcion`) VALUES
+(1, 1, 1, '2018-05-17', '17:00', 'Individual', 'Matematicas\r\n');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `id` int(11) NOT NULL,
+  `usuario` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `tipo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id`, `usuario`, `password`, `tipo`) VALUES
+(1, 'superadmin', 'superadmin', 1),
+(3, 'm@hotmail.com', 'mario', 2);
 
 --
 -- Índices para tablas volcadas
@@ -109,6 +153,20 @@ ALTER TABLE `maestro`
   ADD KEY `carrera` (`carrera`);
 
 --
+-- Indices de la tabla `tutoria`
+--
+ALTER TABLE `tutoria`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `alumno` (`alumno`),
+  ADD KEY `tutor` (`tutor`);
+
+--
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -117,19 +175,26 @@ ALTER TABLE `maestro`
 --
 ALTER TABLE `alumno`
   MODIFY `matricula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT de la tabla `carrera`
 --
 ALTER TABLE `carrera`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
 --
 -- AUTO_INCREMENT de la tabla `maestro`
 --
 ALTER TABLE `maestro`
-  MODIFY `numero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
+  MODIFY `numero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `tutoria`
+--
+ALTER TABLE `tutoria`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Restricciones para tablas volcadas
 --
@@ -146,6 +211,13 @@ ALTER TABLE `alumno`
 --
 ALTER TABLE `maestro`
   ADD CONSTRAINT `maestro_ibfk_1` FOREIGN KEY (`carrera`) REFERENCES `carrera` (`id`) ON DELETE NO ACTION;
+
+--
+-- Filtros para la tabla `tutoria`
+--
+ALTER TABLE `tutoria`
+  ADD CONSTRAINT `tutoria_ibfk_1` FOREIGN KEY (`alumno`) REFERENCES `alumno` (`matricula`),
+  ADD CONSTRAINT `tutoria_ibfk_2` FOREIGN KEY (`tutor`) REFERENCES `maestro` (`numero`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

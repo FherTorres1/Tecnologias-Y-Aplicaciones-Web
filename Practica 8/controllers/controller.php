@@ -311,30 +311,67 @@
 
 		public function ingresoUsuarioController(){
 
-			if(isset($_POST["usuarioIngreso"])){
+			if(isset($_POST["usuarioIngreso"]) && !empty($_POST['usuarioIngreso'])){
 
 				$datosController = array( "usuario"=>$_POST["usuarioIngreso"], 
 									      "password"=>$_POST["passwordIngreso"]);
 
-				$respuesta = Datos::ingresoUsuarioModel($datosController, "usuarios");
+				$respuesta = Datos::ingresoUsuarioModel($datosController, "maestro");
 				//Valiación de la respuesta del modelo para ver si es un usuario correcto.
-				if($respuesta["usuario"] == $_POST["usuarioIngreso"] && $respuesta["password"] == $_POST["passwordIngreso"]){
-
-					session_start();
+				if($respuesta["email"] == $_POST["usuarioIngreso"] && $respuesta["password"] == $_POST["passwordIngreso"]){
 
 					$_SESSION["validar"] = true;
+					$_SESSION['numero'] = $respuesta['numero'];
+					$_SESSION['tipo'] = 2;
 
-					header("location:index.php?action=maestros");
+					header("location:index.php?action=inicio");
 
 				}
 
-				else{
+				else if("superadmin" == $_POST["usuarioIngreso"] && "superadmin" == $_POST["passwordIngreso"])
+				{
+						$_SESSION["validar"] = true;
+						$_SESSION['tipo'] = 1;
+						header("location:index.php?action=inicio");
 
+				}
+				else
+				{
 					header("location:index.php?action=fallo");
-
 				}
+
+				
 
 			}
+
+		}
+
+		public function controlNav()
+		{
+			session_start();
+
+				if(isset($_SESSION['tipo']))
+				{
+					if($_SESSION['tipo'] == 1){
+							echo "<li><a href='index.php?action=ingresar'>Ingreso</a></li>
+						  <li><a href='index.php?action=alumnos'>Alumnos</a></li>
+						  <li><a href='index.php?action=maestros'>Maestros</a></li>
+						  <li><a href='index.php?action=carreras'>Carreras</a></li>
+						  <li><a href='index.php?action=salir'>Salir</a></li>";
+						  echo "xxx0";
+					}else if($_SESSION['tipo'] == 2){
+						echo "<li><a href='index.php?action=ingresar'>Ingreso</a></li>
+						  <li><a href='index.php?action=tutorias'>Tutorias</a></li>
+						  <li><a href='index.php?action=salir'>Salir</a></li>";
+					}
+					
+
+				}
+			else
+			{
+				echo "<li><a href='index.php?action=ingresar'>Ingreso</a></li>";
+			}
+
 		}
 
 		public function editarAlumnoController()
@@ -366,7 +403,7 @@
 
 
 				$respuesta2 = Datos::obtenerMaestrosModel("maestro");
-				echo "<select name='carreraEditar' size='1'>";
+				echo "<select name='tutorEditar' size='1'>";
 				foreach($respuesta2 as $row => $item)
 				{
 					
@@ -389,6 +426,86 @@
 			}
 
 		}
+		public function actualizarAlumnoController()
+		{
+			if(isset($_POST['nombreEditar']))
+			{
+				$datosController = array( "matricula"=>$_POST["numeroEditar"],
+										  "carrera"=>$_POST["carreraEditar"],
+										  "nombre"=>$_POST["nombreEditar"],
+										  "tutor"=>$_POST["tutorEditar"]);
+
+				$respuesta = Datos::actualizarAlumnoModel($datosController,"alumno");
+
+				if($respuesta == "success")
+				{
+
+					header("location:index.php?action=alumnos");
+
+				}
+
+				else
+				{
+
+					echo "error";
+
+				}
+
+			}
+		}
+		public function vistaTutoriasController()
+		{
+			$datosController = $_SESSION['numero'];
+			$respuesta = Datos::vistaTutoriasModel($datosController,"tutoria");
+
+			foreach($respuesta as $row => $item)
+			{
+				echo'<tr>
+				<td>'.$item["id"].'</td>
+				<td>'.$item["alumno"].'</td>
+				<td>'.$item["tutor"].'</td>
+				<td>'.$item["fecha"].'</td>
+				<td>'.$item["hora"].'</td>
+				<td>'.$item["tipo"].'</td>
+				<td>'.$item["descripcion"].'</td>
+				<td><a href="index.php?action=maestros&idBorrar='.$item["id"].'" onclick=confirmar();><button>Borrar</button></a></td>
+				</tr>';
+			}
+		}
+
+
+		public function obtenerAlumnosDeTutorController()
+		{
+			$datosController = $_SESSION['numero'];
+			$respuesta = Datos::obtenerAlumnosDeTutorModel($datosController,"alumno");
+
+			echo "<select name='alumno' size='1'>";
+			foreach($respuesta as $row => $item)
+			{
+				echo "<option value =".$item['matricula'].">" . $item['nombre'] . "</option>";
+			}
+			echo "</select>";
+		}
+
+		public function registrarTutoriaController()
+		{
+			if(isset($_POST['registrar']))
+			{
+				if(!empty($_POST['fecha']) && !empty($_POST['descripcion']))
+				{
+					$dateParts = explode("T",$_POST['fecha']);
+					$datosController = array('alumno'=>$_POST['alumno'],
+											 'tutor'=>$_SESSION['numero'],
+											 'fecha'=>$dateParts[0],
+											 'hora'=>$dateParts[1],
+											 'tipo'=>$_POST['tipo'],
+											 'descripcion'=>$_POST['descripcion']);
+
+					$respuesta = Datos::registrarTutoriaModel($datosController,'tutoria');
+				}
+			}
+		}
+
 
 	}
 

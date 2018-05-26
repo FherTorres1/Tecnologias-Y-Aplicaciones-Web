@@ -51,9 +51,7 @@
 </head>
 <body>
 	<?php
-		require("modules/navegacion.php");
-		
-
+		require_once("modules/navegacion.php");
 		require_once("controllers/controller.php");
 		$mvc = new MvcController();
 		$mvc->enlazarPagina();	

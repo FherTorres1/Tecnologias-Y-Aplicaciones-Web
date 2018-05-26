@@ -1,17 +1,3 @@
-<?php
-
-session_start();
-
-if(!$_SESSION["validar"]){
-
-	header("location:index.php?action=ingresar");
-
-	exit();
-
-}
-
-?>
-
 <h1 align="center">Alumnos</h1>
 <input type="button" name="registrar_btn" value="Registrar Alumno" onclick="window.location='index.php?action=registrar_alumno'">
 

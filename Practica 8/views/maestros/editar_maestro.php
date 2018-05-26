@@ -1,4 +1,4 @@
-<h1>EDITAR CARRERA</h1>
+<h1>EDITAR MAESTRO</h1>
 
 <form method="post">
 	
