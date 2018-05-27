@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Template</title>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practica 8</title>
+    <link rel="stylesheet" href="views/css/foundation.css" />
+    <script src="views/js/vendor/modernizr.js"></script>
+    <script src="views/js/vendor/jquery.js"></script>
+    <link rel="stylesheet" href="views/css/select2.min.css" />
+    <script src="views/js/select2.min.js"></script>
+    <script src="views/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="views/css/jquery.dataTables.min.css" />
 
 	<style>
 
@@ -51,6 +59,7 @@
 </head>
 <body>
 	<?php
+		//Se requioere la navegacion
 		require_once("modules/navegacion.php");
 		require_once("controllers/controller.php");
 		$mvc = new MvcController();
@@ -60,3 +69,13 @@
 
 </body>
 </html>
+
+<script type="text/javascript">
+ //Funcion de JS para enlazar los id de las tablas con y decirles que esos ID son datatable
+  $(document).ready(function(){
+    $('#example').DataTable();
+    $('#example2').DataTable();
+    $('#example3').DataTable();
+
+  })
+</script>

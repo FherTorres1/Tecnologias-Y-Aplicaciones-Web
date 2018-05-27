@@ -1,7 +1,8 @@
 <?php
-
+//Clase informacion
 Class Informacion
 {
+	//Metodo que nos permite saber que accion estamos realizando y con esto poder obtener el archivo php que nos dara la vista
 	public static function enlazador($accion)
 	{
 		if($accion=="carreras" || $accion=="registrar_carrera" || $accion=="editar_carrera")
@@ -20,7 +21,7 @@ Class Informacion
 		{
 			$respuesta = "./views/tutorias/$accion.php";
 		}
-		else if($accion=="ingresar" || $accion=="salir")
+		else if($accion=="ingresar" || $accion=="salir" || $accion=="reportes")
 		{
 			$respuesta =  "views/modules/".$accion.".php";
 		}	
