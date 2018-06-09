@@ -24,8 +24,37 @@
 			$stm->close();
 		}
 
+		public function registrarUsuarioModel($datosModel,$tabla)
+		{
+			$stm = Conexion::conectar()->prepare("INSERT INTO $tabla (email,password) VALUES(:email,:password)");
+			$stm->bindParam(":email",$datosModel['email'],PDO::PARAM_STR);
+			$stm->bindParam(":password",$datosModel['password']);
+			if($stm->execute())
+			{
+				return "success";
+			}
+			else
+			{
+				return "error";
+			}
+
+			$stm->close();
+		}
+
 		//Funcion del modelo para traer la vista de todos los productos
 		public function vistaProductosModel($tabla)
+		{
+
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");	
+			$stmt->execute();
+
+			#fetchAll(): Obtiene todas las filas de un conjunto de resultados asociado al objeto PDOStatement. 
+			return $stmt->fetchAll();
+
+			$stmt->close();
+
+		}
+		public function vistaUsuariosModel($tabla)
 		{
 
 			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");	
@@ -68,8 +97,35 @@
 
 			$stmt->close();
 		}
+
+		public function borrarUsuarioModel($datosModel,$tabla)
+		{
+			$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla where id = :id");
+			$stmt->bindParam("id",$datosModel,PDO::PARAM_STR);
+			if($stmt->execute())
+			{
+				return "success";
+			}
+			else
+			{
+				return "error";
+			}
+
+			$stmt->close();
+		}
+
 		//Funcion del modelo para hacer el formulario y traer los valores del producto dado su ID
 		public function editarProductoModel($datosModel,$tabla)
+		{
+			$stmt = Conexion::conectar()->prepare("SELECT * from $tabla where id = :id");
+			$stmt->bindParam(":id",$datosModel,PDO::PARAM_INT);
+			$stmt->execute();
+			return $stmt->fetch();
+			
+			$stmt->close();
+
+		}
+		public function editarUsuarioModel($datosModel,$tabla)
 		{
 			$stmt = Conexion::conectar()->prepare("SELECT * from $tabla where id = :id");
 			$stmt->bindParam(":id",$datosModel,PDO::PARAM_INT);
@@ -87,6 +143,24 @@
 			$stmt->bindParam(":id",$datosModel["id"],PDO::PARAM_STR);
 			$stmt->bindParam(":precio",$datosModel["precio"],PDO::PARAM_STR);
 			$stmt->bindParam(":unidades",$datosModel["unidades"]);
+
+			if($stmt->execute())
+			{
+				return "success";
+			}
+			else
+			{
+				return "error";
+			}
+		}
+
+		public function actualizarUsuarioModel($datosModel,$tabla)
+		{
+			print_r($datosModel);
+			$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET email = :email, password = :password where id = :id");
+			$stmt->bindParam(":email",$datosModel["email"],PDO::PARAM_STR);
+			$stmt->bindParam(":id",$datosModel["id"],PDO::PARAM_INT);
+			$stmt->bindParam(":password",$datosModel["password"],PDO::PARAM_STR);
 
 			if($stmt->execute())
 			{

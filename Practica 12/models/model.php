@@ -9,7 +9,15 @@ Class Informacion
 		{
 			$respuesta = "./views/productos/$accion.php";
 		}
-		else if($accion=="ingresar" || $accion=="salir" || $accion=="dashboard")
+		else if($accion=="usuarios" || $accion=="registrar_usuario" || $accion=="editar_usuario")
+		{
+			$respuesta = "./views/usuarios/$accion.php";
+		}
+		else if($accion=="categorias" || $accion=="registrar_categoria" || $accion=="editar_categoria")
+		{
+			$respuesta = "./views/categorias/$accion.php";
+		}
+		else if($accion=="ingresar" || $accion=="salir" || $accion=="dashboard" || $accion=="login")
 		{
 			$respuesta =  "views/modules/".$accion.".php";
 		}	

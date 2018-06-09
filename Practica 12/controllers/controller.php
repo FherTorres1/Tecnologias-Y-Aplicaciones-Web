@@ -40,7 +40,30 @@
 			}
 			if($respuesta == "success")
 			{
-				header("Location:index.php?action=productos");
+				echo"<script>
+							window.location = 'index.php?action=productos';
+						</script>";
+			}
+		}
+
+		public function registrarUsuarioController()
+		{
+			$respuesta = "";
+			if(isset($_POST['registrar']))
+			{
+				if(!empty($_POST['email']))
+				{
+					$datosController = array('email'=>$_POST['email'],
+											 'password'=>$_POST['password']);
+
+					$respuesta = Datos::registrarUsuarioModel($datosController,'usuario');
+				}
+			}
+			if($respuesta == "success")
+			{
+				echo"<script>
+							window.location = 'index.php?action=usuarios';
+						</script>";
 			}
 		}
 
@@ -58,8 +81,27 @@
 					<td>'.$item["nombre"].'</td>
 					<td>'.$item["precio"].'</td>
 					<td>'.$item["unidades"].'</td>
-					<td><a href="index.php?action=editar_producto&id='.$item["id"].'"><button class="tiny button" style="font-size:20px;">Editar</button></a></td>
-					<td><a href="index.php?action=productos&idBorrar='.$item["id"].'" onclick=confirmar();><button class="tiny button alert" style="font-size:20px;">Borrar</button></a></td>
+					<td><a href="index.php?action=editar_producto&id='.$item["id"].'"><button class="btn btn-block btn-outline-warning">Editar</button></a></td>
+					<td><a href="index.php?action=productos&idBorrar='.$item["id"].'" onclick=confirmar();><button class="btn btn-block btn-outline-danger">Borrar</button></a></td>
+				</tr>';
+			}
+
+		}
+
+		public function vistaUsuariosController()
+		{
+
+			$respuesta = Datos::vistaUsuariosModel("usuario");
+
+			#El constructor foreach proporciona un modo sencillo de iterar sobre arrays. foreach funciona sólo sobre arrays y objetos, y emitirá un error al intentar usarlo con una variable de un tipo diferente de datos o una variable no inicializada.
+
+			foreach($respuesta as $row => $item){
+			echo'<tr>
+					<td>'.$item["id"].'</td>
+					<td>'.$item["email"].'</td>
+					<td>'.$item["password"].'</td>
+					<td><a href="index.php?action=editar_usuario&id='.$item["id"].'"><button class="btn btn-block btn-outline-warning">Editar</button></a></td>
+					<td><a href="index.php?action=productos&idBorrar='.$item["id"].'" onclick=confirmar();><button class="btn btn-block btn-outline-danger">Borrar</button></a></td>
 				</tr>';
 			}
 
@@ -92,7 +134,9 @@
 
 				if($respuesta == "success")
 				{
-					header("Location: index.php?action=productos");
+					echo"<script>
+							window.location = 'index.php?action=productos';
+						</script>";
 				}
 			}
 		}
@@ -104,20 +148,94 @@
 				$datosController = $_GET["id"];
 				$respuesta = Datos::editarProductoModel($datosController, "producto");
 
-				echo'<input type="hidden" value="'.$respuesta["id"].'" name="idEditar">
-
-					<label>Nombre</label><br>
-				 	<input type="text" value="'.$respuesta["nombre"].'" name="nombreEditar" required>
-
-				 	<label>Precio</label><br>
-				 	<input type="text" value="'.$respuesta["precio"].'" name="precioEditar" required>
-
-				 	<label>Unidades existentes</label><br>
-				 	<input type="text" value="'.$respuesta["unidades"].'" name="unidadesEditar" required>
-
-				 	<input type="submit" value="Actualizar" onclick="confirmar();" class="tiny button">';
+				echo'<div class="card card-success">
+              			<div class="card-header">
+                			<h3 class="card-title">Editar Producto</h3>
+              			</div>
+              			<div class="card-body">
+              				<input name="idEditar" class="form-control form-control-lg" type="hidden" placeholder=".input-lg" value = "'.$respuesta["id"].'">
+              				<br>
+                			<input name="nombreEditar" class="form-control form-control-lg" type="text" placeholder=".input-lg" value = "'.$respuesta["nombre"].'">
+                			<br>
+                			<input name="precioEditar" class="form-control form-control-lg" type="text" placeholder=".input-lg" value = "'.$respuesta["precio"].'">
+                			<br>
+                			<input name="unidadesEditar" class="form-control form-control-lg" type="text" placeholder=".input-lg" value = "'.$respuesta["unidades"].'">
+                			<br>
+                			<input type="submit" value="Actualizar" onclick="confirmar();" class="btn btn-block btn-outline-primary">
+              			</div>
+            		</div>';
 			}
 
+		}
+
+		public function editarUsuarioController()
+		{
+			if(isset($_GET['id']))
+			{
+				$datosController = $_GET["id"];
+				$respuesta = Datos::editarUsuarioModel($datosController, "usuario");
+
+				echo'<div class="card card-success">
+              			<div class="card-header">
+                			<h3 class="card-title">Editar Usuario</h3>
+              			</div>
+              			<div class="card-body">
+              				<input name="idEditar" class="form-control form-control-lg" type="hidden" placeholder=".input-lg" value = "'.$respuesta["id"].'">
+              				<br>
+                			<input name="emailEditar" class="form-control form-control-lg" type="text" placeholder=".input-lg" value = "'.$respuesta["email"].'">
+                			<br>
+                			<input name="passwordEditar" class="form-control form-control-lg" type="text" placeholder=".input-lg" value = "'.$respuesta["password"].'">
+                			<br>
+                			<input type="submit" value="Actualizar" onclick="confirmar();" class="btn btn-block btn-outline-primary">
+              			</div>
+            		</div>';
+			}
+
+		}
+
+		public function actualizarUsuarioController()
+		{
+			if(isset($_POST['emailEditar']))
+			{
+				$datosController = array( "id"=>$_POST["idEditar"],
+										  "email"=>$_POST["emailEditar"],
+										  "password"=>$_POST["passwordEditar"]);
+
+				$respuesta = Datos::actualizarUsuarioModel($datosController,"usuario");
+
+				if($respuesta == "success")
+				{
+					echo"<script>
+							window.location = 'index.php?action=usuarios';
+						</script>";
+
+				}
+
+				else
+				{
+
+					echo "error";
+
+				}
+
+			}
+		}
+
+
+		public function borrarUsuarioController()
+		{
+			if(isset($_GET['idBorrar']))
+			{
+				$datosController = $_GET['idBorrar'];
+				$respuesta = Datos::borrarUsuarioModel($datosController,'usuario');
+
+				if($respuesta == "success")
+				{
+					echo"<script>
+							window.location = 'index.php?action=usuarios';
+						</script>";
+				}
+			}
 		}
 
 		//Funcion para actualizar la BD con el nuevo producto en base a su ID
@@ -135,7 +253,9 @@
 				if($respuesta == "success")
 				{
 
-					header("location:index.php?action=productos");
+					echo"<script>
+							window.location = 'index.php?action=productos';
+						</script>";
 
 				}
 

@@ -1,44 +1,59 @@
-<?php
-	//Se comprueba si se ha inciiado sesion
-	if(!isset($_SESSION['validar']))
-	{
-		header("Location: index.php");
-	}
-?>
-<h1 align="center">Productos</h1>
-<div align="center">
-<input type="button" name="registrar_btn" value="Registrar Producto" class="button tiny success" style='width: 20%; font-size: 20px;' onclick="window.location='index.php?action=registrar_producto'">
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Productos</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Data Tables</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+		<section class="content">
+      <div class="row">
+        <div class="col-12">
+					<div class="card">
+            <div class="card-header">
+              <h3 class="card-title"><a href="index.php?action=registrar_producto"><button class="btn btn-block btn-outline-success" style="width:20%;">Registrar Producto</button></a></h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Precio</th>
+                  <th>Unidades</th>
+                  <th>Editar</th>
+                  <th>Borrar</th>
+                </tr>
+                </thead>
+								<tbody>
+									<?php
+										//Se hace una instancia del controlador
+										$vistaProducto = new MvcController();
+										//Se manda llamar el metodo para traer la vista de los productos
+										$vistaProducto->vistaProductosController();
+										//Se manda llamar el metodo para borrar algun producto en base a su ID
+										$vistaProducto->borrarProductoController();
+
+									?>
+								</tbody>
+							</table>
+ 						</div>
+ 					</div>
+ 				</div>
+ 			</div>
+ 		</section>
 </div>
-
-<link rel="stylesheet" href="./css/foundation.css"/>
-<table border="2" align="center" class="display" width="80%" id="example">
-		
-	<thead>
-			
-		<tr>
-			<th>Id</th>
-			<th>Nombre</th>
-			<th>Precio</th>
-			<th>Unidades</th>
-			<th>Editar?</th>
-			<th>Borrar?</th>
-		</tr>
-
-	</thead>
-
-	<tbody>
-
-		<?php
-			//Se hace una instancia del controlador
-			$vistaProducto = new MvcController();
-			//Se manda llamar el metodo para traer la vista de los productos
-			$vistaProducto->vistaProductosController();
-			//Se manda llamar el metodo para borrar algun producto en base a su ID
-			$vistaProducto->borrarProductoController();
-
-		?>
-	</tbody>
-</table>
 
 
 <script type="text/javascript">
