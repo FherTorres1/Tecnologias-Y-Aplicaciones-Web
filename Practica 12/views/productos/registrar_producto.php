@@ -1,3 +1,18 @@
+<?php
+
+  if(!isset($_SESSION['validar']))
+  {
+    echo"<script>
+            window.location = 'index.php?action=login';
+          </script>";
+  }
+
+  //Se hace una instancia del controlador
+  $mvc = new MvcController();
+  //Se manda llamar el metodo registrarProducto para registrar el producto en la BD
+  $mvc->registrarProductoController();
+?>
+
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -23,19 +38,26 @@
             </div>
             <!-- /.card-header -->
           	<div class="card-body">
-							<form method="post" style="font-family: Arial; width: 50%; margin-left: 350px">
+							<form method="post" style="font-family: Arial; width: 50%; margin-left: 265px">
 								<div class="card card-success">
               		<div class="card-header">
-                			<h3 class="card-title">Registrar Producto</h3>
+                			<h3 class="card-title">Nuevo Producto</h3>
               		</div>
               		<div class="card-body">
               				<br>
+                      <input name="codigo" class="form-control form-control-lg" type="text" placeholder="Codigo de Producto">
+                      <br>
                 			<input name="nombre" class="form-control form-control-lg" type="text" placeholder="Nombre">
                 			<br>
                 			<input name="precio" class="form-control form-control-lg" type="text" placeholder="Precio">
                 			<br>
-                			<input name="unidades" class="form-control form-control-lg" type="text" placeholder="Unidades">
-                			<br>
+                			<input name="unidades" class="form-control form-control-lg" type="text" placeholder="Unidades"><br>
+                        <label>Categoria</label>
+                        <select class="form-control select2" style="width: 100%;" name="categoria">
+                          <?php $mvc->obtenerCategoriasController(); ?>
+                        </select>
+                      <br>
+                      <br>
                 			<input type="submit" value="Registrar" class="btn btn-block btn-outline-success" name="registrar">
               			</div>
             		</div>
@@ -48,10 +70,3 @@
 </section>
 </div>
 
-<?php
-
-	//Se hace una instancia del controlador
-	$mvc = new MvcController();
-	//Se manda llamar el metodo registrarProducto para registrar el producto en la BD
-	$mvc->registrarProductoController();
-?>

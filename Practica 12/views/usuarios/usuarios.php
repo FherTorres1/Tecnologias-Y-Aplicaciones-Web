@@ -1,3 +1,11 @@
+<?php
+  if(!isset($_SESSION['validar']))
+  {
+    echo"<script>
+            window.location = 'index.php?action=login';
+          </script>";
+  }
+?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -27,12 +35,14 @@
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
-                <tr>
+                <tr class="bg-info">
                   <th>ID</th>
-                  <th>Correo</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Usuario</th>
                   <th>Password</th>
-                  <th>Editar</th>
-                  <th>Borrar</th>
+                  <th>Correo</th>
+                  <th>Acciones</th>
                 </tr>
                 </thead>
 								<tbody>
@@ -53,16 +63,3 @@
  			</div>
  		</section>
 </div>
-
-
-<script type="text/javascript">
-	//Funcion de JS para confirmar si queremos borrar una carrera
-	function confirmar()
-	{
-		var x = confirm("Seguro que deseas borrar el registro?");
-		if(!x)
-		{
-			event.preventDefault();
-		}
-	}
-</script>

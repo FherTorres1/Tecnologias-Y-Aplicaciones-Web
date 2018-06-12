@@ -8,13 +8,13 @@
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 
-      <form action="../../index2.html" method="post">
+      <form method="post">
         <div class="form-group has-feedback">
-          <input type="email" class="form-control" placeholder="Email">
+          <input type="email" class="form-control" placeholder="Email" name="email">
           <span class="fa fa-envelope form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" class="form-control" placeholder="Password" name="password">
           <span class="fa fa-lock form-control-feedback"></span>
         </div>
         <div class="row">
@@ -59,7 +59,7 @@
 </body>
 
 <?php
-/*
+
 //Se hace una instancia del controlador
 $ingreso = new MvcController();
 //Se manda llamar el metodo para hacer el login
@@ -73,6 +73,6 @@ if(isset($_GET["action"])){
 	
 	}
 
-}*/
+}
 
 ?>

@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>Sistema de Inventarios</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
+  <link rel="stylesheet" href="views/plugins/select2/select2.min.css">
   <link rel="stylesheet" href="views/plugins/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -30,13 +31,20 @@
 
 </head>
 	<?php
-		
-    require_once('modules/header.php');
-		require_once("modules/navegacion.php");
+		session_start();
+    if(isset($_SESSION["validar"]))
+    { 
+      require_once('modules/header.php');
+		  require_once("modules/navegacion.php");
+    }
 		require_once("controllers/controller.php");
 		$mvc = new MvcController();
 		$mvc->enlazarPagina();
-    require_once('modules/footer.php');	
+    if(isset($_SESSION["validar"]))
+    {  
+      require_once('modules/footer.php');
+    }
+
 	?>
 
 
@@ -82,6 +90,14 @@
 
 <script src="views/plugins/datatables/jquery.dataTables.js"></script>
 <script src="views/plugins/datatables/dataTables.bootstrap4.js"></script>
+<script src="views/plugins/select2/select2.full.min.js"></script>
+<script src="views/plugins/input-mask/jquery.inputmask.js"></script>
+
+<script src="views/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="views/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script src="/plugins/iCheck/icheck.min.js"></script>
+
+
 
 
 
@@ -90,7 +106,11 @@
 
 <script>
   $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+    
     $("#example1").DataTable();
+    
     $('#example2').DataTable({
       "paging": true,
       "lengthChange": false,
@@ -99,5 +119,36 @@
       "info": true,
       "autoWidth": false
     });
-  });
+  })
+
+  jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
 </script>
+
+<script type="text/javascript">
+  //Funcion de JS para confirmar si queremos borrar una carrera
+  function confirmar()
+  {
+    var x = prompt("Ingresa tu contrasena para la accion");
+
+    var currentPassword ="<?php echo $_SESSION['password'];?>";
+
+    if(x!="")
+    {
+      if(x!=currentPassword)
+      {
+        event.preventDefault();
+        window.alert("Contrasena equivocada");
+      }
+      
+    }
+
+
+
+  }
+</script>
+
+

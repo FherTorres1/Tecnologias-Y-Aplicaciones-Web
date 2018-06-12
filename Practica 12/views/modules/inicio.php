@@ -1,3 +1,12 @@
+<?php
+
+  if(!isset($_SESSION['validar']))
+  {
+    echo"<script>
+            window.location = 'index.php?action=login';
+          </script>";
+  }
+?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -21,28 +30,58 @@
         <div class="col-12">
 					<div class="card">
             <div class="card-header">
-              <h3 class="card-title">Productos sin stock</h3>
+              <h3 class="card-title">Informacion</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
+            <div class="row" align="">
+                <?php
+                  //Se hace una instancia del controlador
+                  $vistaProductos = new MvcController(); 
+                  $vistaProductos-> vistaDashboardController() ?>
+              </div>
+              <br><br><br>
+              <div class="card-header">
+              <h3 class="card-title">Productos sin stock</h3>
+              </div>
+              <br><br>
               <table id="example1" class="table table-bordered table-striped">
-                <thead>
+                <thead class="bg-info">
                 <tr>
                   <th>Nombre</th>
-                  <th>Unidades</th>
+                  <th>Stock</th>
                 </tr>
                 </thead>
 								<tbody>
 
 									<?php
-										//Se hace una instancia del controlador
-										$vistaProductos = new MvcController();
 										//Se manda llamar al vista de productos sin Stock
 										$vistaProductos->vistaProductosSinStock();
 									?>
 								</tbody>
 							</table>
- 						</div>
+              <div class="card-header">
+              <h3 class="card-title">Transacciones del dia de hoy</h3>
+              </div>
+              <br><br>
+              <table id="example2" class="table table-bordered table-striped">
+                <thead>
+                <tr class="bg-info">
+                  <th>Fecha</th>
+                  <th>Descripcion</th>
+                  <th>Referencia</th>
+                  <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                  <?php
+                    //Se manda llamar al vista de productos sin Stock
+                    $vistaProductos->vistaHistorialController();
+                  ?>
+                </tbody>
+              </table>
+            </div>
  					</div>
  				</div>
  			</div>

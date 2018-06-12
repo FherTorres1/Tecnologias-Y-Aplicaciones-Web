@@ -1,3 +1,11 @@
+<?php
+  if(!isset($_SESSION['validar']))
+  {
+    echo"<script>
+            window.location = 'index.php?action=login';
+          </script>";
+  }
+?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -23,16 +31,16 @@
             </div>
             <!-- /.card-header -->
           	<div class="card-body">
-							<form method="post" style="font-family: Arial; width: 50%; margin-left: 350px">
+							<form method="post" style="font-family: Arial; width: 50%; margin-left: 265px">
 			
 								<?php
 
 									//Se hace una instancia del controlador
 									$editarProducto = new MvcController();
 									//Se llama el metodo editarCarrera para traer el formulario y los datos del producto
-									$editarProducto -> editarProductoController();
+									$editarProducto -> editarCategoriaController();
 									//Se llama el metodo actualizarCarrera para actualizar el producto en la BD
-									$editarProducto -> actualizarProductoController();
+									$editarProducto -> actualizarCategoriaController();
 
 								?>
 
@@ -43,15 +51,3 @@
 		</div>
 </section>
 </div>
-
-<script type="text/javascript">
-	//Funcion para comprobar si se quiere actualizar la carrera
-	function confirmar()
-	{
-		var x = confirm("Deseas guardar los datos?");
-		if(!x)
-		{
-			event.preventDefault();
-		}
-	}
-</script>

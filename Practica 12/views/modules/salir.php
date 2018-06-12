@@ -1,6 +1,8 @@
 <?php
 session_destroy();
-header("location:index.php?action=inicio");
+echo"<script>
+		window.location = 'index.php?action=login';
+	</script>";
 
 ?>
 

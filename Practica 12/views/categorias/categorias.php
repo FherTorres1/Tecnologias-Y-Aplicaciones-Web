@@ -1,3 +1,11 @@
+<?php
+  if(!isset($_SESSION['validar']))
+  {
+    echo"<script>
+            window.location = 'index.php?action=login';
+          </script>";
+  }
+?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -26,24 +34,23 @@
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
-                <thead>
+                <thead class="bg-info">
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>
-                  <th>Precio</th>
-                  <th>Unidades</th>
-                  <th>Editar</th>
-                  <th>Borrar</th>
+                  <th>Descripcion</th>
+                  <th>Fecha anadida</th>
+                  <th>Acciones</th>
                 </tr>
                 </thead>
 								<tbody>
 									<?php
 										//Se hace una instancia del controlador
 										$vistaProducto = new MvcController();
-										//Se manda llamar el metodo para traer la vista de los productos
-										$vistaProducto->vistaProductosController();
+										//Se manda llamar el metodo para traer la vista de todas las categorias existentes
+										$vistaProducto->vistaCategoriasController();
 										//Se manda llamar el metodo para borrar algun producto en base a su ID
-										$vistaProducto->borrarProductoController();
+										$vistaProducto->borrarCategoriaController();
 
 									?>
 								</tbody>
@@ -54,16 +61,3 @@
  			</div>
  		</section>
 </div>
-
-
-<script type="text/javascript">
-	//Funcion de JS para confirmar si queremos borrar una carrera
-	function confirmar()
-	{
-		var x = confirm("Seguro que deseas borrar el registro?");
-		if(!x)
-		{
-			event.preventDefault();
-		}
-	}
-</script>

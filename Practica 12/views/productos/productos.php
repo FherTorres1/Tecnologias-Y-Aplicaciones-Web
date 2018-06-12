@@ -26,14 +26,14 @@
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
-                <thead>
+                <thead class="bg-info">
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>
                   <th>Precio</th>
                   <th>Unidades</th>
-                  <th>Editar</th>
-                  <th>Borrar</th>
+                  <th>Categoria</th>
+                  <th>Acciones</th>
                 </tr>
                 </thead>
 								<tbody>
@@ -54,16 +54,3 @@
  			</div>
  		</section>
 </div>
-
-
-<script type="text/javascript">
-	//Funcion de JS para confirmar si queremos borrar una carrera
-	function confirmar()
-	{
-		var x = confirm("Seguro que deseas borrar el registro?");
-		if(!x)
-		{
-			event.preventDefault();
-		}
-	}
-</script>
