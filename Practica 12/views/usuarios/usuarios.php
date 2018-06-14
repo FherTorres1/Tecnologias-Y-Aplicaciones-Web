@@ -43,6 +43,7 @@
                   <th>Usuario</th>
                   <th>Password</th>
                   <th>Correo</th>
+                  <th>Fecha anadida</th>
                   <th>Acciones</th>
                 </tr>
                 </thead>

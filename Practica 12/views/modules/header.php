@@ -21,6 +21,13 @@
         </div>
       </div>
     </form>
+    <ul class="navbar-nav ml-auto">
+    <?php $mvc = new MvcController();
+          $mvc->showNotificationsController();
+    ?>
+    </ul>
+
+    
 
   </nav>
   <!-- /.navbar -->

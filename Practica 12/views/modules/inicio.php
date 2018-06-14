@@ -65,10 +65,11 @@
               <h3 class="card-title">Transacciones del dia de hoy</h3>
               </div>
               <br><br>
-              <table id="example2" class="table table-bordered table-striped">
+              <table id="historialT" class="table table-bordered table-striped">
                 <thead>
                 <tr class="bg-success">
                   <th>Fecha</th>
+                  <th>Producto</th>
                   <th>Descripcion</th>
                   <th>Referencia</th>
                   <th>Total</th>

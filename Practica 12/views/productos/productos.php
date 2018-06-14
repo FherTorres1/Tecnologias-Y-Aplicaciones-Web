@@ -38,6 +38,7 @@
                 <thead class="bg-success">
                 <tr>
                   <th>ID</th>
+                  <th>Codigo de producto</th>
                   <th>Nombre</th>
                   <th>Precio</th>
                   <th>Unidades</th>

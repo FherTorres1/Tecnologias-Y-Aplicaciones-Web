@@ -197,7 +197,7 @@
 		public function vistaHistorialModel($datosModel,$tabla)
 		{
 
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla where fecha >= :today AND fecha <= :later AND id_tienda = :id_tienda");
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla inner join producto on $tabla.id_producto = producto.id_producto where fecha >= :today AND fecha <= :later AND $tabla.id_tienda = :id_tienda");
 			$stmt->bindParam(":today",$datosModel['hoy'],PDO::PARAM_STR);
 			$stmt->bindParam(":later",$datosModel['later'],PDO::PARAM_STR);
 			$stmt->bindParam(":id_tienda",$datosModel['id_tienda'],PDO::PARAM_INT);	

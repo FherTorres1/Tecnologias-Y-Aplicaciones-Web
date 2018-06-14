@@ -114,18 +114,26 @@
     //Initialize Select2 Elements
     $('.select2').select2()
     
+    //Inicializa los datatable
     $("#example1").DataTable();
     
     $('#example2').DataTable();
   })
 
+  //Funcion para ordenar el datatable en base al ultimo registro creado (Historial Y Ventas)
+  $(document).ready(function(){
+    $("#historialT").DataTable({
+      "order": [[0,"desc"]]
+    })
+  })  
+
+  //Funcion Jquery para hacer una tabla clickeable
   jQuery(document).ready(function($) {
     $(".clickable-row").click(function() {
         window.location = $(this).data("href");
     });
 });
 
-  $('#myModal').modal({ show: false})
 
 </script>
 
@@ -154,6 +162,8 @@
 
   }
 
+  //Funcion JSCRIPT para cambiar las etiquetas al cambiar un producto en una venta, esto nos sirve
+  //para ver el precio del producto, su stock, etc
   function changeLabels()
   {
     var e = document.getElementById("producto");
@@ -167,6 +177,7 @@
     label1.innerHTML="Stock disponible: "+stock;
     label2.innerHTML="Precio de venta $"+precio;
   }
+  //Funcion de JSCRIPT para agregar los productos a la tabla
   function addProducts()
   {
     var e = document.getElementById("producto");
@@ -296,7 +307,8 @@
           });
         }
 
-
+        //Funcion de JSCRIPT para confirmar si queremos borrar un registro y nos pida la contrasena
+        //para hacerlo
           function confirmarDelete(id){
           var dbPassword = "<?php echo $_SESSION['password'] ?>";
           event.preventDefault();
@@ -327,6 +339,8 @@
           });
 
         }
+        //Funcion de JSCRIPT para pedir la contrasena en caso de que se quiera desactivar o activar
+        //una tienda
           function Desactivar(id){
           var dbPassword = "<?php echo $_SESSION['password'] ?>";
           event.preventDefault();

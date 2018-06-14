@@ -193,12 +193,24 @@
 					$respueta=Datos::registrarProductosVentasModel("venta_producto",$datosController);
 					$respuesta2=Datos::updateStockModelForSales($datosController,"producto");
 
+					$fecha = date("Y-m-d H:i:s");
+					$nota = 'El empleado ' . $_SESSION['nombre'] . ' ' . $_SESSION['apellido'] . ' vendió ' . $_POST['cantC'.$i] . ' producto(s)';
+					$datosController2=array("idProducto"=>$_POST['idC'.$i],
+										    "idUser"=>$_SESSION['id'],
+										    "fecha"=>$fecha,
+										    "nota"=>$nota,
+										    "referencia"=>"venta",
+										    "cantidad"=>$_POST['cantC'.$i],
+										    "id_tienda"=>$_SESSION['id_tienda']);
+					$respuesta3 = Datos::insertarHistorialModel($datosController2,"historial");
+
 					echo '<script>
-								swal({title: "Exito!", 
-									text: "Venta realizada!!", 
+									swal({title: "Exito!", 
+									text: "Stock realizada!!", 
 										 type: "success"});
-							window.location = "index.php?action=ventas";
-						</script>';
+									window.location = "index.php?action=ventas";
+								</script>';
+
 
 				}
 			}
@@ -305,6 +317,7 @@
 			foreach($respuesta as $row => $item){
 			echo'<tr>
 					<td class="clickable-row" data-href="index.php?action=movimiento&id='.$item["id_producto"].'">'.$item["id_producto"].'</td>
+					<td class="clickable-row" data-href="index.php?action=movimiento&id='.$item["id_producto"].'">'.$item["codigo_producto"].'</td>
 					<td class="clickable-row" data-href="index.php?action=movimiento&id='.$item["id_producto"].'">'.$item["nombre_producto"].'</td>
 					<td class="clickable-row" data-href="index.php?action=movimiento&id='.$item["id_producto"].'">'.$item["precio_producto"].'</td>
 					<td class="clickable-row" data-href="index.php?action=movimiento&id='.$item["id_producto"].'">'.$item["stock"].'</td>
@@ -385,10 +398,11 @@
 		                  				<input type="image" src="views/dist/img/stock-in.png"name="entrada" value="Entrada">           
 		                  				<input type="image" src="views/dist/img/stock-out.png" name="salida" value="Salida">
 		                  			</center><br><br>
-          							<table id="example1" class="table table-bordered table-striped">
+          							<table id="historialT" class="table table-bordered table-striped">
                 						<thead class="bg-success">
                 							<tr>
                   								<th>Fecha</th>
+                  								<th>Producto</th>
 								                <th>Descripcion</th>
 								                <th>Referencia</th>
 								                <th>Total</th>
@@ -545,7 +559,7 @@
 												 	'referencia'=>$_POST['referencia'],
 												 	'cantidad'=>$cantity,
 												 	'id_tienda'=>$_SESSION['id_tienda']);
-							$respuesta = Datos::insertarHistorialModel($datosController,"historial");
+							$respFuesta = Datos::insertarHistorialModel($datosController,"historial");
 							if($respuesta=="success")
 							{
 								echo '<script>
@@ -622,6 +636,7 @@
 					<td>'.$item["user_name"].'</td>
 					<td>'.md5($item["user_password_hash"]).'</td>
 					<td>'.$item["user_email"].'</td>
+					<td>'.$item["date_added"].'</td>
 					<td><div class="btn-group">
                           <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <span class="fa fa-cog"></span>
@@ -700,6 +715,7 @@
 			foreach($respuesta as $row => $item){
 			echo'<tr>
 					<td>'.$item["fecha"].'</td>
+					<td>'.$item["nombre_producto"].'</td>
 					<td>'.$item["nota"].'</td>
 					<td>'.$item["referencia"].'</td>
 					<td>'.$item["cantidad"].'</td>
@@ -1166,7 +1182,7 @@
 	            				</a>
 	          				</li>
 	          				<li class="nav-item">
-				            	<a href="index.php?action=salir" class="nav-link">
+				            	<a onclick="confirmarSesion();" href="index.php?action=salir" class="nav-link">
 				              		<i class="nav-icon fa fa-sign-out"></i>
 				              		<p>Logout</p>
 				            	</a>
@@ -1211,7 +1227,7 @@
 			            	</a>
 			          	</li>
 			          	<li class="nav-item">
-			            	<a onclick="confirmarSesion();"class="nav-link">
+			            	<a onclick="confirmarSesion();" class="nav-link">
 			              		<i class="nav-icon fa fa-sign-out"></i>
 			              		<p>Logout</p>
 			            	</a>
@@ -1282,6 +1298,34 @@
 			echo"<script>
 					window.location = 'index.php?action=tiendas';
 				</script>";
+		}
+
+		//Funcion que se encarga de buscar cuales productos no tienen stock y mostrarlo como
+		//notificacion
+		public function showNotificationsController()
+		{
+			$datosController = $_SESSION['id_tienda'];
+			$respuesta = Datos::vistaProductosSinStock("producto",$datosController);
+
+			#El constructor foreach proporciona un modo sencillo de iterar sobre arrays. foreach funciona sólo sobre arrays y objetos, y emitirá un error al intentar usarlo con una variable de un tipo diferente de datos o una variable no inicializada.
+
+			echo ' <li class="nav-item dropdown">
+        			<a class="nav-link" data-toggle="dropdown" href="#">
+          			<i class="fa fa-bell-o"></i>
+          			<span class="badge badge-warning navbar-badge">';
+          			if(count($respuesta)>0){echo count($respuesta);} echo'</span>
+        			</a>
+        		<div class="dropdown-menu dropdown-menu-dark dropdown-menu-right">
+          	<span class="dropdown-item dropdown-header">'.count($respuesta).' producto(s) sin stock</span>';
+			foreach($respuesta as $row => $item){
+          	echo'<div class="dropdown-divider"></div>
+          	<a href="index.php?action=productos" class="dropdown-item">
+            	<i class="fa fa-tv mr-2" style="color:black;"></i> <i style="color:black;">El producto '.$item['nombre_producto'].' no tiene stock!</i>
+            	<span class="float-right text-muted text-sm"></span>
+          	</a>';
+			}
+			echo '</li>';
+			
 		}
 
 		
