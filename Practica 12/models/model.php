@@ -17,6 +17,10 @@ Class Informacion
 		{
 			$respuesta = "./views/categorias/$accion.php";
 		}
+		else if($accion=="tiendas" || $accion=="salir_tienda" || $accion=="registrar_tienda" || $accion=="editar_tienda")
+		{
+			$respuesta = "./views/tiendas/$accion.php";
+		}
 		else if($accion=="ingresar" || $accion=="salir" || $accion=="dashboard" || $accion=="login")
 		{
 			$respuesta =  "views/modules/".$accion.".php";
@@ -28,6 +32,10 @@ Class Informacion
 		else if($accion=="fallo")
 		{
 			$respuesta = "views/modules/login.php";
+		}
+		else if($accion=="ventas" || $accion=="registrar_venta" || $accion=="detalle_venta")
+		{
+			$respuesta = "views/ventas/$accion.php";
 		}	
 		else
 		{

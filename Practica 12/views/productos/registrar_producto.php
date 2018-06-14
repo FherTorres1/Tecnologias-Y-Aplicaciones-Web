@@ -1,5 +1,5 @@
 <?php
-
+   //Se regresa el login si no se ha iniciado sesion
   if(!isset($_SESSION['validar']))
   {
     echo"<script>
@@ -54,7 +54,9 @@
                 			<input name="unidades" class="form-control form-control-lg" type="text" placeholder="Unidades"><br>
                         <label>Categoria</label>
                         <select class="form-control select2" style="width: 100%;" name="categoria">
-                          <?php $mvc->obtenerCategoriasController(); ?>
+                          <?php
+                          	//OBtener las categorias de la BD para registrarla en la tabla producto 
+                          	$mvc->obtenerCategoriasController(); ?>
                         </select>
                       <br>
                       <br>

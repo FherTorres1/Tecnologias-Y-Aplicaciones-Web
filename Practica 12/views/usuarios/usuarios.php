@@ -1,4 +1,5 @@
 <?php
+  //Se regresa el login si no existe
   if(!isset($_SESSION['validar']))
   {
     echo"<script>
@@ -35,7 +36,7 @@
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
-                <tr class="bg-info">
+                <tr class="bg-success">
                   <th>ID</th>
                   <th>Nombre</th>
                   <th>Apellido</th>
@@ -49,9 +50,9 @@
 									<?php
 										//Se hace una instancia del controlador
 										$vistaUsuario = new MvcController();
-										//Se manda llamar el metodo para traer la vista de los productos
+										//Se manda llamar el metodo para traer la vista de los usuarios
 										$vistaUsuario->vistaUsuariosController();
-										//Se manda llamar el metodo para borrar algun producto en base a su ID
+										//Se manda llamar el metodo para borrar algun usuario en base a su ID
 										$vistaUsuario->borrarUsuarioController();
 
 									?>

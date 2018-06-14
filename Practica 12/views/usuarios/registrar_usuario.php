@@ -1,5 +1,5 @@
 <?php
-
+  //Se regresa al login si no se ha iniciado sesion
   if(!isset($_SESSION['validar']))
   {
     echo"<script>
@@ -66,6 +66,6 @@
 
 	//Se hace una instancia del controlador
 	$mvc = new MvcController();
-	//Se manda llamar el metodo registrarProducto para registrar el producto en la BD
+	//Se manda llamar el metodo registrarProducto para registrar el usuario en la BD
 	$mvc->registrarUsuarioController();
 ?>

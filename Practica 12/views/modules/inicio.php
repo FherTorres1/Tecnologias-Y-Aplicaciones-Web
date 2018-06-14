@@ -1,5 +1,5 @@
 <?php
-
+  //Se regresa al login si no se ha iniciado sesion
   if(!isset($_SESSION['validar']))
   {
     echo"<script>
@@ -38,6 +38,7 @@
                 <?php
                   //Se hace una instancia del controlador
                   $vistaProductos = new MvcController(); 
+                  //Se hace una vista de dashboard utilizando los widgets y poniendo informacion real en ellos
                   $vistaProductos-> vistaDashboardController() ?>
               </div>
               <br><br><br>
@@ -46,27 +47,27 @@
               </div>
               <br><br>
               <table id="example1" class="table table-bordered table-striped">
-                <thead class="bg-info">
+                <thead class="bg-success">
                 <tr>
                   <th>Nombre</th>
                   <th>Stock</th>
                 </tr>
                 </thead>
-								<tbody>
+					<tbody>
 
-									<?php
-										//Se manda llamar al vista de productos sin Stock
-										$vistaProductos->vistaProductosSinStock();
-									?>
-								</tbody>
-							</table>
+						<?php
+							//Se manda llamar al vista de productos sin Stock
+							$vistaProductos->vistaProductosSinStock();
+						?>
+						</tbody>
+				</table>
               <div class="card-header">
               <h3 class="card-title">Transacciones del dia de hoy</h3>
               </div>
               <br><br>
               <table id="example2" class="table table-bordered table-striped">
                 <thead>
-                <tr class="bg-info">
+                <tr class="bg-success">
                   <th>Fecha</th>
                   <th>Descripcion</th>
                   <th>Referencia</th>
@@ -76,7 +77,7 @@
                 <tbody>
 
                   <?php
-                    //Se manda llamar al vista de productos sin Stock
+                    //Se manda llamar al vista del historial de transacciones que se hizo el dia de hoy
                     $vistaProductos->vistaHistorialController();
                   ?>
                 </tbody>

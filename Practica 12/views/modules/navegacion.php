@@ -1,3 +1,6 @@
+<?php
+  $mvc = new MvcController();
+?>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
   <!-- Main Sidebar Container -->
@@ -18,7 +21,7 @@
         </div>
         <div class="info">
           <a href="#" class="d-block"><?php echo $_SESSION['nombre'] . " " . $_SESSION['apellido'];?></a>
-          <i class="fa fa-circle text-success"></i>
+          <i class="text-success"><?php $mvc->obtenerTiendaController();?> </i>
         </div>
       </div>
 
@@ -27,36 +30,10 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a href="index.php" class="nav-link">
-              <i class="nav-icon fa fa-dashboard"></i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="index.php?action=productos" class="nav-link">
-              <i class="nav-icon fa fa-tv"></i>
-              <p>Inventario</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="index.php?action=usuarios" class="nav-link">
-              <i class="nav-icon fa fa-users"></i>
-              <p>Usuarios</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="index.php?action=categorias" class="nav-link">
-              <i class="nav-icon fa fa-tags"></i>
-              <p>Categorias</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="index.php?action=salir" class="nav-link">
-              <i class="nav-icon fa fa-sign-out"></i>
-              <p>Logout</p>
-            </a>
-          </li>
+          <?php
+            $mvc = new MvcController();
+            $mvc->controlNav();
+          ?>
         </ul>
           
       </nav>

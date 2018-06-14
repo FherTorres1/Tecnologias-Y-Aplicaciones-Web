@@ -1,3 +1,12 @@
+<?php
+  //Se regresa el login si no se ha iniciado sesion
+  if(!isset($_SESSION['validar']))
+  {
+    echo"<script>
+            window.location = 'index.php?action=login';
+          </script>";
+  } 
+?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -26,7 +35,7 @@
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
-                <thead class="bg-info">
+                <thead class="bg-success">
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>

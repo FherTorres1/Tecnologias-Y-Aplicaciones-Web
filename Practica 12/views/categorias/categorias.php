@@ -1,4 +1,6 @@
 <?php
+
+  //Se regresa al login si no se ha iniciado sesion
   if(!isset($_SESSION['validar']))
   {
     echo"<script>
@@ -34,7 +36,7 @@
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
-                <thead class="bg-info">
+                <thead class="bg-success">
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>
@@ -49,7 +51,7 @@
 										$vistaProducto = new MvcController();
 										//Se manda llamar el metodo para traer la vista de todas las categorias existentes
 										$vistaProducto->vistaCategoriasController();
-										//Se manda llamar el metodo para borrar algun producto en base a su ID
+										//Se manda llamar el metodo para borrar alguna categoria en base a su ID
 										$vistaProducto->borrarCategoriaController();
 
 									?>

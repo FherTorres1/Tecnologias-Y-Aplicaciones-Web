@@ -32,8 +32,6 @@
           <!-- /.col -->
         </div>
       </form>
-
-      
       <!-- /.social-auth-links -->
     </div>
     <!-- /.login-card-body -->
@@ -41,20 +39,20 @@
 </div>
 <!-- /.login-box -->
 
-<!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- iCheck -->
-<script src="../../plugins/iCheck/icheck.min.js"></script>
+
+  <!-- jQuery -->
+  <script src="views/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="views/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
 <script>
   $(function () {
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
       radioClass   : 'iradio_square-blue',
       increaseArea : '20%' // optional
-    })
-  })
+    });
+  });
 </script>
 </body>
 
@@ -64,15 +62,5 @@
 $ingreso = new MvcController();
 //Se manda llamar el metodo para hacer el login
 $ingreso -> ingresoUsuarioController();
-
-if(isset($_GET["action"])){
-
-	if($_GET["action"] == "fallo"){
-
-		echo "Fallo al ingresar";
-	
-	}
-
-}
 
 ?>

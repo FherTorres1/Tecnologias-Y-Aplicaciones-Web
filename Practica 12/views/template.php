@@ -27,11 +27,16 @@
   <link rel="stylesheet" href="views/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  
+  <script src="views/dist/js/plugins/sweetalert/sweetalert.js"></script>
+    <!--script src="view/dist/js/plugins/sweetalert/sweetalert.min.js"></script-->
+  <link rel="stylesheet" href="views/dist/js/plugins/sweetalert/sweetalert.css">
 </head>
 
-</head>
 	<?php
+    //Se inicia la sesion
 		session_start();
+    //Si la variable de sesion validar esta encendida entonces se incluye la cabecera, pie de pagina y navegacion, esto nos sirve para solo mostrar el logion a la hora de no haber iniciado sesion
     if(isset($_SESSION["validar"]))
     { 
       require_once('modules/header.php');
@@ -95,7 +100,7 @@
 
 <script src="views/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
 <script src="views/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-<script src="/plugins/iCheck/icheck.min.js"></script>
+<script src="views/plugins/iCheck/icheck.min.js"></script>
 
 
 
@@ -111,14 +116,7 @@
     
     $("#example1").DataTable();
     
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false
-    });
+    $('#example2').DataTable();
   })
 
   jQuery(document).ready(function($) {
@@ -126,10 +124,16 @@
         window.location = $(this).data("href");
     });
 });
+
+  $('#myModal').modal({ show: false})
+
 </script>
 
 <script type="text/javascript">
-  //Funcion de JS para confirmar si queremos borrar una carrera
+
+  var count=0;
+  var tot=0;
+  //Funcion de JS para confirmar si queremos borrar algun dato, este nos pide la contrasena para validarla
   function confirmar()
   {
     var x = prompt("Ingresa tu contrasena para la accion");
@@ -149,6 +153,242 @@
 
 
   }
+
+  function changeLabels()
+  {
+    var e = document.getElementById("producto");
+    var label1 = document.getElementById("label1");
+    var label2 = document.getElementById("label2");
+    var codigo = e.options[e.selectedIndex].value;
+
+    var stock = document.getElementById("stock"+codigo).value;
+    var precio = document.getElementById("precio"+codigo).value;
+
+    label1.innerHTML="Stock disponible: "+stock;
+    label2.innerHTML="Precio de venta $"+precio;
+  }
+  function addProducts()
+  {
+    var e = document.getElementById("producto");
+    var label1 = document.getElementById("label1");
+    var label2 = document.getElementById("label2");
+    var codigo = e.options[e.selectedIndex].value;
+    var str = e.options[e.selectedIndex].text;
+    var stock = document.getElementById("stock"+codigo).value;
+    var precio = document.getElementById("precio"+codigo).value;
+    var totalL = document.getElementById("total");
+
+    var combined = str.split(' - ');
+    var id = document.getElementById("id"+codigo).value;
+    var cant = document.getElementById("cant"+codigo)
+    var total = 0.0;
+    var a = 0;
+    flag = 0;
+    var fila = '';
+    if(cant)
+    {
+      var z = cant.value;
+      a = parseInt(z, 10);
+      a = a + 1;
+      if(a<=parseInt(stock))
+      {
+        total = parseFloat(precio) * a;
+        document.getElementById("cant"+codigo).value=a;
+        document.getElementById("total"+codigo).value=total;
+        tot = tot+ parseFloat(precio);
+        totalL.innerHTML = "TOTAL: $" +  tot;
+      }
+      else
+      {
+                  swal({title: "Error", 
+                    text: "No hay suficiente stock!", 
+                     type: "error"});
+      }
+    }
+    else
+    {
+      total = parseFloat(precio);
+      a = 1;
+      if(a<=parseInt(stock))
+      {
+        fila = '<tr><td style="background-color:white;"><input name="idC'+count+'" type="text" readonly value="'+id+'" style="width:50px; border:none;"></td><td style="background-color:white;"><input name="codigoC'+count+'" type="text" readonly value="'+codigo+'" style="width:100px; border:none"></td><td style="background-color:white;"><input name="nombreC'+count+'" type="text" readonly value="'+combined[1]+'" style="width:100px; border:none"></td><td style="background-color:white;"><input name="precioC'+count+'" type="text" readonly value="'+precio+'" style="width:100px; border:none"></td> <td style="background-color:white;"><input id="cant'+codigo+'" name="cantC'+count+'" type="text" readonly value="'+a+'" style="width:100px; border:none"></td><td style="background-color:white;"><input id="total'+codigo+'"name="totalC'+count+'" type="text" readonly value="'+total+'" style="width:100px; border:none"></td></tr>';
+
+          document.getElementById("table1").getElementsByTagName("tbody")[0].insertRow(-1).innerHTML=fila;
+          count++;
+          document.getElementById("count").value=count;
+          tot = tot+ parseFloat(precio);
+          totalL.innerHTML = "TOTAL: $" +  tot;
+      }
+      else
+      {
+        swal({title: "Error", 
+                    text: "No hay suficiente stock!", 
+                     type: "error"});
+      }  
+    }
+    document.getElementById("inTotal").value=tot;
+  }
+
+  //funcion de confirmacion de cierre de sesion, muestra un sweet alert
+        function confirmarSesion()
+        {
+          event.preventDefault();
+          swal({
+          title: "Cerrar sesión",
+          text: "¿Seguro que deseas cerrar la sesión?",
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: "Cancelar",
+          confirmButtonClass: "btn-info",
+          confirmButtonText: "Si, estoy seguro",
+          closeOnConfirm: false
+          },
+          function(){
+            window.location = 'index.php?action=salir';
+          });
+        }
+
+        function confirmarTienda()
+        {
+          event.preventDefault();
+          swal({
+          title: "Salir de tienda",
+          text: "¿Seguro que deseas salir de la tienda?",
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: "Cancelar",
+          confirmButtonClass: "btn-info",
+          confirmButtonText: "Si, estoy seguro",
+          closeOnConfirm: false
+          },
+          function(){
+            window.location = 'index.php?action=salir_tienda';
+          });
+        }
+
+         //funcion encargada de mostrar un alert cuando el usuario da clic en el boton actualizar y pida la contraseña
+        function confirmarUpdate(){
+          var dbPassword = "<?php echo $_SESSION['password'] ?>";
+          event.preventDefault();
+          swal({
+            title: "Confirmar acción",
+            text: "<p>Ingresa tu contraseña para guardar los cambios</p><br><input type='password' class='form-control' id='pass' placeholder='Contraseña' autofocus><label id='err_sa' style='color:red'></label><br>",
+            html: true,
+            
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonText: "Confirmar",
+            closeOnConfirm: false,
+            inputPlaceholder: "Contraseña",
+            inputValidator: (value) => {
+              return !value && 'No puedes dejar el campo vacio!'
+            }
+          }, function () {
+            var inputValue = document.getElementById("pass").value;
+            if (inputValue === false) return false;
+            if (inputValue != dbPassword) {
+              document.getElementById("err_sa").innerHTML = "Contraseña incorrecta";
+              return false
+            }
+             $( "#btn" ).click();
+            swal("Exito!", "Registro modificado", "success");
+          });
+        }
+
+
+          function confirmarDelete(id){
+          var dbPassword = "<?php echo $_SESSION['password'] ?>";
+          event.preventDefault();
+          swal({
+            title: "Confirmar acción",
+            text: "<p>Ingresa tu contraseña para borrar el registro</p><br><input type='password' class='form-control' id='pass' placeholder='Contraseña' autofocus><label id='err_sa' style='color:red'></label><br>",
+            html: true,
+            
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonText: "Confirmar",
+            closeOnConfirm: false,
+            inputPlaceholder: "Contraseña",
+            inputValidator: (value) => {
+              return !value && 'No puedes dejar el campo vacio!'
+            }
+          }, function () {
+            var inputValue = document.getElementById("pass").value;
+            if (inputValue === false) return false;
+            if (inputValue != dbPassword) {
+              document.getElementById("err_sa").innerHTML = "Contraseña incorrecta";
+              return false
+            }
+            var url = document.getElementById("btn"+id).href;
+            window.location = url;
+            swal("Exito!", "Registro eliminado", "error");
+          });
+
+        }
+          function Desactivar(id){
+          var dbPassword = "<?php echo $_SESSION['password'] ?>";
+          event.preventDefault();
+          swal({
+            title: "Confirmar acción",
+            text: "<p>Ingresa tu contraseña para DESACTIVAR la tienda.</p><br><input type='password' class='form-control' id='pass' placeholder='Contraseña' autofocus><label id='err_sa' style='color:red'></label><br>",
+            html: true,
+            
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonText: "Confirmar",
+            closeOnConfirm: false,
+            inputPlaceholder: "Contraseña",
+            inputValidator: (value) => {
+              return !value && 'No puedes dejar el campo vacio!'
+            }
+          }, function () {
+            var inputValue = document.getElementById("pass").value;
+            if (inputValue === false) return false;
+            if (inputValue != dbPassword) {
+              document.getElementById("err_sa").innerHTML = "Contraseña incorrecta";
+              return false
+            }
+            var url = document.getElementById("btn"+id).href;
+            window.location = url;
+            swal("Exito!", "Tienda desactivada", "error");
+          });
+        }
+
+          function Activar(id){
+          var dbPassword = "<?php echo $_SESSION['password'] ?>";
+          event.preventDefault();
+          swal({
+            title: "Confirmar acción",
+            text: "<p>Ingresa tu contraseña para ACTIVAR la tienda.</p><br><input type='password' class='form-control' id='pass' placeholder='Contraseña' autofocus><label id='err_sa' style='color:red'></label><br>",
+            html: true,
+            
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonText: "Confirmar",
+            closeOnConfirm: false,
+            inputPlaceholder: "Contraseña",
+            inputValidator: (value) => {
+              return !value && 'No puedes dejar el campo vacio!'
+            }
+          }, function () {
+            var inputValue = document.getElementById("pass").value;
+            if (inputValue === false) return false;
+            if (inputValue != dbPassword) {
+              document.getElementById("err_sa").innerHTML = "Contraseña incorrecta";
+              return false
+            }
+            var url = document.getElementById("btn"+id).href;
+            window.location = url;
+            swal("Exito!", "Tienda activada", "success");
+          });
+      
+      }
+
+
 </script>
 
 

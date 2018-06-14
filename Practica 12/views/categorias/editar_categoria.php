@@ -1,4 +1,5 @@
 <?php
+  //Si no se esta logeado se regresa al login
   if(!isset($_SESSION['validar']))
   {
     echo"<script>
@@ -37,9 +38,9 @@
 
 									//Se hace una instancia del controlador
 									$editarProducto = new MvcController();
-									//Se llama el metodo editarCarrera para traer el formulario y los datos del producto
+									//Se llama el metodo editarCarrera para traer el formulario y los datos de la categoria
 									$editarProducto -> editarCategoriaController();
-									//Se llama el metodo actualizarCarrera para actualizar el producto en la BD
+									//Se llama el metodo actualizarCarrera para actualizar el la categoria de la BD
 									$editarProducto -> actualizarCategoriaController();
 
 								?>

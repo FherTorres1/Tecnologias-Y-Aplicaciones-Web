@@ -1,3 +1,12 @@
+<?php
+  //Se regresa el login si no se ha iniciado sesion
+  if(!isset($_SESSION['validar']))
+  {
+    echo"<script>
+            window.location = 'index.php?action=login';
+          </script>";
+  } 
+?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -17,8 +26,11 @@
     </section>
     <form method="POST">
     <?php
+      //Se hace una instancia del controlador
       $mvc = new MvcController();
+      //Se obtienen los datos del producto que se eligio para mostrarlos en la pantalla
       $mvc->obtenerDatosProductoController();
+      //Funcion para realizar la actualizacion de stock y la insercion del historial
       $mvc->controlarStockController();
     ?>
     </form>
